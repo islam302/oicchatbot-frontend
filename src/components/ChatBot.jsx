@@ -215,11 +215,6 @@ const ChatPage = () => {
       );
     };
 
-  const stripHtmlTags = (html) => {
-    const div = document.createElement("div");
-    div.innerHTML = html;
-    return div.textContent || div.innerText || "";
-  };
 
   const handleSimilarQuestion = async (id) => {
     const similarQuestion = messages.find((msg) => msg.id === id);
@@ -227,7 +222,7 @@ const ChatPage = () => {
 
     try {
       const response = await axios.post(
-        "https://unachatbot.onrender.com/ask_questions/",
+        "https://oicchatbot.onrender.com/ask_questions/",
         {
           question: similarQuestion.text,
         }
@@ -368,20 +363,20 @@ const ChatPage = () => {
         {/* Message input form */}
       <form onSubmit={sendMessage} className="chat-input-form">
         <div className="api-toggle-buttons-container">
-          <button
-            type="button"
-            onClick={handleGeneralClick}
-            className={`api-toggle-button ${!useUnaApi ? "active" : ""}`}
-          >
-            أسئلة عامة
-          </button>
-          <button
-            type="button"
-            onClick={handleUnaClick}
-            className={`api-toggle-button ${useUnaApi ? "active" : ""}`}
-          >
-            (UNA) أسئلة من منصة
-          </button>
+          {/*<button*/}
+          {/*  type="button"*/}
+          {/*  onClick={handleGeneralClick}*/}
+          {/*  className={`api-toggle-button ${!useUnaApi ? "active" : ""}`}*/}
+          {/*>*/}
+          {/*  أسئلة عامة*/}
+          {/*</button>*/}
+          {/*<button*/}
+          {/*  type="button"*/}
+          {/*  onClick={handleUnaClick}*/}
+          {/*  className={`api-toggle-button ${useUnaApi ? "active" : ""}`}*/}
+          {/*>*/}
+          {/*  (OIC) أسئلة من منصة*/}
+          {/*</button>*/}
         </div>
         <div className="form-question-container">
           <input

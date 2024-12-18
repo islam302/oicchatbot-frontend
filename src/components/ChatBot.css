@@ -20,10 +20,10 @@ body {
 .una-logo {
   display: block;
   margin: 0 auto;
-  width: 500px; /* Adjust the width as needed */
+  width: 400px;
   height: auto;
   position: relative;
-  top: -30px;
+  top: -20px;
 }
 
 @keyframes upDown {
@@ -162,7 +162,7 @@ body {
 .chat-message.user .message-text {
   max-width: 70%;
   font-size: 1.1rem;
-  background-color: #0a4c5a;
+  background-color: #323436;
   color: #fff;
   border-radius: 15px;
   padding: 12px;
@@ -201,7 +201,7 @@ body {
 }
 
 .api-toggle-button {
-  background-color: #0a4c5a;
+  background-color: #323436;
   color: white;
   border: none;
   width: 20%;
@@ -267,7 +267,7 @@ body {
 }
 
 .send-button {
-  background-color: #0a4c5a;
+  background-color: #323436;
   border: none;
   color: white;
   border-radius: 50%;
@@ -290,7 +290,7 @@ body {
 
 .microphone-button {
   border: none;
-  background: #0a4c5a;
+  background: #323436;
   border-radius: 50%;
   transform: scale(1.05);
   width: 45px;
@@ -343,7 +343,7 @@ body {
   top: 20px;
   right: 20px;
   color: white;
-  background-color: #0a4c5a;
+  background-color: #323436;
   padding: 8px 16px;
   border-radius: 20px;
   font-weight: bold;
@@ -362,7 +362,7 @@ body {
   font-size: 18px;
   text-align: right;
   color: white;
-  background-color: #156d7c;
+  background-color: #323436;
   border: none;
   border-radius: 10px; /* ??? ?????? ???? ??????? */
   cursor: pointer;
@@ -372,7 +372,7 @@ body {
 }
 
 .collapsible-button:hover {
-  background-color: #0a4c5a;
+  background-color: #FFFFFFAD;
   transform: scale(1.02);
 }
 

@@ -444,6 +444,7 @@ body {
   .chat-message.user .message-text {
     max-width: 90%;
     margin-right: 0;
+    margin-bottom: -15px; /* تقليل المسافة بين الرسائل */
   }
 
   .send-button,

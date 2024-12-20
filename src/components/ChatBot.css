@@ -391,15 +391,15 @@ body {
 
   .chat-message.user .message-text {
     max-width: 70%;
-    margin-right: 0;
+    margin-right: 120px;
   }
 
   .una-logo {
-    width: 300px;
+    width: 350px;
   }
 
   .current-date {
-    top: 80px;
+    top: 85px;
     right: 50%;
     transform: translateX(50%);
   }
@@ -407,17 +407,23 @@ body {
   .robot-container {
     position: absolute;
     top: 2%;
-    right: 22%;
-    width: 7%;
+    right: 18%;
+    width: 10%;
     height: 14%;
     animation: upDown 2s ease-in-out infinite;
+  }
+
+  .form-question-container {
+    display: flex;
+    align-items: center;
+    margin-top: 100px; /* أو أي قيمة تناسبك */
   }
 
 }
 
 @media (max-width: 480px) {
   .una-logo {
-    width: 250px;
+    width: 300px;
   }
 
   .current-date {
@@ -480,6 +486,12 @@ body {
     font-size: 12px;
     padding: 8px;
   }
+
+  .form-question-container {
+    display: flex;
+    align-items: center;
+    margin-top: 100px; /* أو أي قيمة تناسبك */
+  }
 }
 
 @media (max-width: 400px) {
@@ -491,9 +503,11 @@ body {
   .chat-input-form {
     width: 100%;
   }
+
   .chat-message {
     margin-bottom: 5px; /* Reduce the margin between messages */
   }
+
   .chat-message.bot .message-text,
   .chat-message.user .message-text {
     max-width: 100%;
@@ -507,6 +521,12 @@ body {
     width: 30px;
     height: 30px;
     font-size: 1rem;
+  }
+
+  .form-question-container {
+      display: flex;
+      align-items: center;
+      margin-top: 100px; /* أو أي قيمة تناسبك */
   }
 
   .footer {
@@ -529,11 +549,11 @@ body {
   }
 
   .una-logo {
-    width: 250px;
+    width: 300px;
   }
 
   .current-date {
-    top: 57px;
+    top: 70px;
     right: 50%;
     transform: translateX(50%);
   }
@@ -551,7 +571,7 @@ body {
 
 @media (max-width: 320px) {
   .una-logo {
-    width: 150px;
+    width: 200px;
   }
 
   .chat-message.bot .message-text,

@@ -55,8 +55,9 @@ const ChatPage = () => {
     setInput("");
 
     const apiUrl = useUnaApi
-      ? "https://unachatbot.onrender.com/ask_una/"
+      ? "https://oicchatbot.onrender.com/ask_una/"
       : "https://oicchatbot.onrender.com/ask_questions/";
+
 
     try {
       console.log("Sending request to:", apiUrl);
@@ -423,7 +424,7 @@ const ChatPage = () => {
           >
             OIC.OIC.ORG
           </a>{" "}
-          جميع الحقوق محفوظة لصالح
+          جميع الحقوق محفوظة
         </p>
         <div className="social-icons">
           <a

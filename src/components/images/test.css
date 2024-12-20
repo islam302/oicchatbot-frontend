@@ -93,9 +93,17 @@ body {
   margin-bottom: 10px;
 }
 
+.chat-message.user {
+  justify-content: flex-end;
+}
+
+.chat-message.bot {
+  justify-content: flex-start;
+}
+
 .similar-question-button {
-  background-color: #323436;
-  color: #ffff;
+  background-color: #99e3ca;
+  color: #08593e;
   border: none;
   padding: 8px 12px;
   border-radius: 5px;
@@ -123,11 +131,9 @@ body {
 }
 
 .chat-message.bot .message-text {
-  max-width: 35%;
-  max-height: auto;
-  min-width: 100px;
+  max-width: 70%;
   font-size: 1.1rem;
-  background-color: #202123;
+  background-color: #323436;
   color: #ffffff;
   border-radius: 15px;
   padding: 12px;
@@ -135,12 +141,6 @@ body {
   animation: fadeIn 0.4s ease-in-out;
   text-align: right;
   direction: rtl;
-  margin-right: 400px;
-  visibility: hidden;
-}
-
-.chat-message.bot .message-text:not(:empty) {
-  visibility: visible;
 }
 
 .chat-message.user .message-text {
@@ -152,7 +152,8 @@ body {
   padding: 12px;
   margin: 5px;
   animation: fadeIn 0.4s ease-in-out;
-  margin-right: 400px;
+  text-align: right;
+  direction: rtl;
 }
 
 .api-toggle-buttons-container {
@@ -329,12 +330,12 @@ body {
 
 .collapsible-content {
   padding: 15px;
-  background-color: #323436;
-  border: 1px solid #656464;
+  background-color: #f8f9fa;
+  border: 1px solid #ddd;
   border-radius: 10px;
   margin-top: 10px;
   font-size: 16px;
-  color: #fff;
+  color: #333;
   line-height: 1.8;
   text-align: right;
   max-width: 600px;
@@ -384,7 +385,6 @@ body {
   .chat-message.bot .message-text,
   .chat-message.user .message-text {
     max-width: 70%;
-    margin-right: 0;
   }
 }
 
@@ -404,7 +404,6 @@ body {
   .chat-message.bot .message-text,
   .chat-message.user .message-text {
     max-width: 90%;
-    margin-right: 0;
   }
 
   .send-button,
@@ -471,7 +470,6 @@ body {
   .chat-message.user .message-text {
     max-width: 100%;
     font-size: 1rem;
-    margin-right: 0;
   }
 
   .send-button,
@@ -514,7 +512,6 @@ body {
   .chat-message.bot .message-text,
   .chat-message.user .message-text {
     max-width: 100%;
-    margin-right: 0;
   }
 
   .send-button,

@@ -514,6 +514,7 @@ body {
     max-width: 100%;
     font-size: 1rem;
     margin-right: 0;
+    margin-bottom: -15px;
   }
 
   .send-button,
@@ -532,6 +533,8 @@ body {
 
   .footer {
     font-size: 0.6rem;
+    position: relative;
+    top: 91.5%; /* رفع العنصر للأعلى */
   }
 
   .social-icons a {

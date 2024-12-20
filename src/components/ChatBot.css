@@ -366,12 +366,18 @@ body {
   .chat-input-form {
     width: 85%;
   }
+  .robot-container {
+    position: absolute;
+    top: 2%;
+    right: 23%;
+    width: 7%;
+    height: 14%;
+    animation: upDown 2s ease-in-out infinite;
+  }
+
 }
 
 @media (max-width: 768px) {
-  .una-logo {
-    width: 300px;
-  }
 
   .chat-container {
     width: 90%;
@@ -382,15 +388,42 @@ body {
   }
 
   .chat-message.bot .message-text,
+
   .chat-message.user .message-text {
     max-width: 70%;
     margin-right: 0;
   }
+
+  .una-logo {
+    width: 300px;
+  }
+
+  .current-date {
+    top: 80px;
+    right: 50%;
+    transform: translateX(50%);
+  }
+
+  .robot-container {
+    position: absolute;
+    top: 2%;
+    right: 22%;
+    width: 7%;
+    height: 14%;
+    animation: upDown 2s ease-in-out infinite;
+  }
+
 }
 
 @media (max-width: 480px) {
   .una-logo {
-    width: 200px;
+    width: 250px;
+  }
+
+  .current-date {
+    top: 80px;
+    right: 50%;
+    transform: translateX(50%);
   }
 
   .chat-container {
@@ -423,11 +456,6 @@ body {
     margin: 0 5px;
   }
 
-  .current-date {
-    font-size: 0.8rem;
-    padding: 5px 10px;
-  }
-
   .collapsible-button {
     font-size: 0.9rem;
     padding: 10px;
@@ -455,9 +483,6 @@ body {
 }
 
 @media (max-width: 400px) {
-  .una-logo {
-    width: 180px;
-  }
 
   .chat-container {
     width: 100%;
@@ -466,7 +491,9 @@ body {
   .chat-input-form {
     width: 100%;
   }
-
+  .chat-message {
+    margin-bottom: 5px; /* Reduce the margin between messages */
+  }
   .chat-message.bot .message-text,
   .chat-message.user .message-text {
     max-width: 100%;
@@ -475,6 +502,7 @@ body {
   }
 
   .send-button,
+
   .microphone-button {
     width: 30px;
     height: 30px;
@@ -490,11 +518,6 @@ body {
     margin: 0 3px;
   }
 
-  .current-date {
-    font-size: 0.7rem;
-    padding: 4px 8px;
-  }
-
   .collapsible-button {
     font-size: 0.8rem;
     padding: 8px;
@@ -504,6 +527,26 @@ body {
     font-size: 0.7rem;
     padding: 8px;
   }
+
+  .una-logo {
+    width: 250px;
+  }
+
+  .current-date {
+    top: 57px;
+    right: 50%;
+    transform: translateX(50%);
+  }
+
+  .robot-container {
+    position: absolute;
+    top: 2%;
+    right: 2%;
+    width: 7%;
+    height: 14%;
+    animation: upDown 2s ease-in-out infinite;
+  }
+
 }
 
 @media (max-width: 320px) {
@@ -548,3 +591,6 @@ body {
     padding: 8px;
   }
 }
+
+
+

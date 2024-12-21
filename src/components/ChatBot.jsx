@@ -5,7 +5,6 @@ import { GiReturnArrow } from "react-icons/gi";
 import { TypeAnimation } from "react-type-animation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faWhatsapp,
   faFacebook,
   faTwitter,
 } from "@fortawesome/free-brands-svg-icons";
@@ -426,13 +425,6 @@ const ChatPage = () => {
           جميع الحقوق محفوظة لصالح
         </p>
         <div className="social-icons">
-          <a
-            href="https://whatsapp.com/channel/0029Va9VuuE1XquahZEY5S1S"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <FontAwesomeIcon icon={faWhatsapp} />
-          </a>
           <a
             href="https://www.facebook.com/oicinenglish/?locale=ar_AR"
             target="_blank"

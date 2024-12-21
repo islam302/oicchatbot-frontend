@@ -266,13 +266,13 @@ body {
 }
 
 .footer {
-  margin-top: 20px;
   position: fixed;
-  bottom: -0.8%;
+  bottom: 10px;
   width: 100%;
   color: #ffffff;
   text-align: center;
 }
+
 
 .social-icons {
   margin: 0px 0;
@@ -514,7 +514,6 @@ body {
     max-width: 100%;
     font-size: 1rem;
     margin-right: 0;
-    margin-bottom: -15px;
   }
 
   .send-button,
@@ -533,8 +532,6 @@ body {
 
   .footer {
     font-size: 0.6rem;
-    position: relative;
-    top: 91.5%; /* رفع العنصر للأعلى */
   }
 
   .social-icons a {
@@ -615,6 +612,5 @@ body {
     padding: 8px;
   }
 }
-
 
 

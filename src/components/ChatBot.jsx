@@ -418,7 +418,7 @@ const ChatPage = () => {
             href="https://www.oic-oci.org/"
             target="_blank"
             rel="noopener noreferrer"
-            style={{ color: "blue" }}
+            style={{color: '#2e89a8'}}
           >
             OIC.OIC.ORG
           </a>{" "}

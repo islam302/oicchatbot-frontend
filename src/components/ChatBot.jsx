@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
-import Cookies from "js-cookie"; // مكتبة للتعامل مع الكوكيز
 import { FiSend } from "react-icons/fi";
 import { GiReturnArrow } from "react-icons/gi";
 import { TypeAnimation } from "react-type-animation";
@@ -46,7 +45,6 @@ const ChatPage = () => {
     );
   };
 
-
   const sendMessage = async (e) => {
     e.preventDefault();
     if (!input.trim()) return;
@@ -59,35 +57,21 @@ const ChatPage = () => {
       ? "https://oicchatbot-bamu.onrender.com/ask_una/"
       : "https://oicchatbot-bamu.onrender.com/ask_questions/";
 
-    // الحصول على CSRF token من الكوكيز
-    const csrfToken = Cookies.get("csrftoken");
-
     try {
       console.log("Sending request to:", apiUrl);
       console.log("Payload:", { question: input });
 
-      // إرسال الطلب مع CSRF token
-      const response = await axios.post(
-        apiUrl,
-        { question: input },
-        {
-          headers: {
-            "X-CSRFToken": csrfToken, // تضمين CSRF token في الهيدر
-            "Content-Type": "application/json", // تحديد نوع البيانات المرسلة
-          },
-          withCredentials: true, // للسماح بإرسال الكوكيز عبر الدومينات
-        }
-      );
-
+      const response = await axios.post(apiUrl, { question: input });
       console.log("Response Data:", response.data);
 
       const updatedMessages = [...newMessages];
 
       if (useUnaApi) {
-        // معالجة الرد القادم من UNA API
+        // Handle UNA API response
         if (response.data.answer && response.data.answer.length > 0) {
           response.data.answer.forEach((answer) => {
             if (answer.search_url) {
+              // Render a button for the search URL
               updatedMessages.push({
                 text: `
                   <div style="text-align: center;">
@@ -113,6 +97,7 @@ const ChatPage = () => {
                 isHtml: true,
               });
             } else {
+              // Render individual answer content
               const imageHtml = answer.image_url
                 ? `<img src="${answer.image_url}" alt="Image" style="width: 100%; height: auto; margin-top: 10px; border-radius: 10px;">`
                 : "";
@@ -155,8 +140,9 @@ const ChatPage = () => {
           });
         }
       } else {
-        // معالجة الرد القادم من `ask_questions` API
+        // Handle `ask_questions` API response
         if (response.data.answer_type === "multiple") {
+          // Process 'multiple' answers
           const answerText = response.data.answer;
           const lines = answerText.split("\n");
           const collapsibleItems = [];
@@ -164,14 +150,14 @@ const ChatPage = () => {
 
           lines.forEach((line) => {
             if (line.startsWith("-")) {
-              currentTitle = line;
+              currentTitle = line; // Keep raw HTML for the title
               collapsibleItems.push({
                 title: currentTitle,
                 description: "",
                 isExpanded: false,
               });
             } else if (currentTitle) {
-              collapsibleItems[collapsibleItems.length - 1].description += line;
+              collapsibleItems[collapsibleItems.length - 1].description += line; // Keep raw HTML for the description
             }
           });
 
@@ -182,7 +168,7 @@ const ChatPage = () => {
           });
         } else if (response.data.answer) {
           updatedMessages.push({
-            text: response.data.answer,
+            text: addLinkTargetAttribute(response.data.answer),
             sender: "bot",
             icon: "https://i.postimg.cc/YSzf3QQx/chatbot-1.png",
             isHtml: true,
@@ -235,7 +221,7 @@ const ChatPage = () => {
 
     try {
       const response = await axios.post(
-        "http://oicchatbot-bamu.onrender.com/ask_questions/",
+        "https://oicchatbot.onrender.com/ask_questions/",
         {
           question: similarQuestion.text,
         }

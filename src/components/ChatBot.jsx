@@ -58,133 +58,47 @@ const ChatPage = () => {
       : "https://oicchatbot-bamu.onrender.com/ask_questions/";
 
     try {
-      console.log("Sending request to:", apiUrl);
-      console.log("Payload:", { question: input });
-
       const response = await axios.post(apiUrl, { question: input });
-      console.log("Response Data:", response.data);
-
       const updatedMessages = [...newMessages];
 
-      if (useUnaApi) {
-        // Handle UNA API response
-        if (response.data.answer && response.data.answer.length > 0) {
-          response.data.answer.forEach((answer) => {
-            if (answer.search_url) {
-              // Render a button for the search URL
-              updatedMessages.push({
-                text: `
-                  <div style="text-align: center;">
-                    <a href="${answer.search_url}" 
-                       target="_blank" 
-                       rel="noopener noreferrer" 
-                       style="
-                          background-color: #0a4c5a; 
-                          color: white; 
-                          padding: 8px 16px; 
-                          text-decoration: none; 
-                          border-radius: 20px; 
-                          font-weight: bold; 
-                          display: inline-block; 
-                          margin-top: 10px; 
-                          text-align: center;">
-                       للإطلاع على المزيد من الأخبار إضغط هنا
-                    </a>
-                  </div>
-                `,
-                sender: "bot",
-                icon: "https://i.postimg.cc/YSzf3QQx/chatbot-1.png",
-                isHtml: true,
-              });
-            } else {
-              // Render individual answer content
-              const imageHtml = answer.image_url
-                ? `<img src="${answer.image_url}" alt="Image" style="width: 100%; height: auto; margin-top: 10px; border-radius: 10px;">`
-                : "";
-
-              updatedMessages.push({
-                text: `
-                  <div style="border: 1px solid #ddd; border-radius: 10px; overflow: hidden; padding: 15px; margin-bottom: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
-                    ${imageHtml}
-                    <p style="color: #666; font-size: 12px; margin-top: 10px; text-align: center;">${answer.date}</p>
-                    <h3 style="font-size: 18px; color: #333; margin-top: 10px;">${answer.title}</h3>
-                    <p style="color: #555; font-size: 14px; line-height: 1.6; margin-top: 10px;">${answer.content}</p>
-                    <a href="${answer.link}" 
-                       target="_blank" 
-                       rel="noopener noreferrer" 
-                       style="
-                          background-color: #0a4c5a; 
-                          color: white; 
-                          padding: 8px 16px; 
-                          text-decoration: none; 
-                          border-radius: 20px; 
-                          font-weight: bold; 
-                          display: inline-block; 
-                          margin-top: 10px; 
-                          text-align: center;">
-                      أكمل القراءة
-                    </a>
-                  </div>
-                `,
-                sender: "bot",
-                icon: "https://i.postimg.cc/YSzf3QQx/chatbot-1.png",
-                isHtml: true,
-              });
-            }
+      if (response.data.answer_type === "multiple") {
+        const overview = response.data.overview_description || "";
+        const collapsibleItems = response.data.answer
+          .split("\n")
+          .filter(line => line.startsWith("-"))
+          .map(line => {
+            const [titlePart, ...descParts] = line.split(":");
+            return {
+              title: titlePart.replace("-", "").trim(),
+              description: addLinkTargetAttribute(descParts.join(":").trim()), // معالجة الروابط
+              isExpanded: false
+            };
           });
-        } else {
-          updatedMessages.push({
-            text: "آسف، لم أتمكن من العثور على إجابة.",
-            sender: "bot",
-            icon: "https://i.postimg.cc/wB80F6Z9/chatbot.png",
-          });
-        }
+      
+        updatedMessages.push({
+          sender: "bot",
+          overview: addLinkTargetAttribute(overview), // معالجة الروابط هنا أيضًا
+          collapsibleItems: collapsibleItems,
+          type: "multipleAnswers"
+        });
+      } else if (response.data.answer) {
+        updatedMessages.push({
+          text: addLinkTargetAttribute(response.data.answer),
+          sender: "bot",
+          icon: "https://i.postimg.cc/YSzf3QQx/chatbot-1.png",
+          isHtml: true,
+        });
       } else {
-        // Handle `ask_questions` API response
-        if (response.data.answer_type === "multiple") {
-          // Process 'multiple' answers
-          const answerText = response.data.answer;
-          const lines = answerText.split("\n");
-          const collapsibleItems = [];
-          let currentTitle = "";
-
-          lines.forEach((line) => {
-            if (line.startsWith("-")) {
-              currentTitle = line; // Keep raw HTML for the title
-              collapsibleItems.push({
-                title: currentTitle,
-                description: "",
-                isExpanded: false,
-              });
-            } else if (currentTitle) {
-              collapsibleItems[collapsibleItems.length - 1].description += line; // Keep raw HTML for the description
-            }
-          });
-
-          updatedMessages.push({
-            sender: "bot",
-            collapsibleItems,
-            type: "multipleAnswers",
-          });
-        } else if (response.data.answer) {
-          updatedMessages.push({
-            text: addLinkTargetAttribute(response.data.answer),
-            sender: "bot",
-            icon: "https://i.postimg.cc/YSzf3QQx/chatbot-1.png",
-            isHtml: true,
-          });
-        } else {
-          updatedMessages.push({
-            text: "آسف، لم أتمكن من العثور على الإجابة.",
-            sender: "bot",
-            icon: "https://i.postimg.cc/wB80F6Z9/chatbot.png",
-          });
-        }
+        updatedMessages.push({
+          text: "آسف، لم أتمكن من العثور على الإجابة.",
+          sender: "bot",
+          icon: "https://i.postimg.cc/wB80F6Z9/chatbot.png",
+        });
       }
 
       setMessages(updatedMessages);
     } catch (error) {
-      console.error("Error sending message:", error.response || error.message);
+      console.error("Error sending message:", error);
       setMessages((prevMessages) => [
         ...prevMessages,
         {
@@ -197,22 +111,20 @@ const ChatPage = () => {
   };
 
   const toggleItem = (messageIndex, itemIndex) => {
-      setMessages((prevMessages) =>
-        prevMessages.map((msg, msgIdx) => {
-          if (msgIdx === messageIndex && msg.type === "multipleAnswers") {
-            return {
-              ...msg,
-              collapsibleItems: msg.collapsibleItems.map((item, idx) =>
-                idx === itemIndex
-                  ? { ...item, isExpanded: !item.isExpanded }
-                  : item
-              ),
-            };
-          }
-          return msg;
-        })
-      );
-    };
+    setMessages((prevMessages) =>
+      prevMessages.map((msg, msgIdx) => {
+        if (msgIdx === messageIndex && msg.type === "multipleAnswers") {
+          return {
+            ...msg,
+            collapsibleItems: msg.collapsibleItems.map((item, idx) =>
+              idx === itemIndex ? { ...item, isExpanded: !item.isExpanded } : item
+            ),
+          };
+        }
+        return msg;
+      })
+    );
+  };
 
 
   const handleSimilarQuestion = async (id) => {
@@ -309,51 +221,49 @@ const ChatPage = () => {
       {/* Chat messages container */}
       <div className="chat-container">
         <div className="chat-messages">
-            {messages.map((msg, index) => (
-                <div key={index} className={`chat-message ${msg.sender}`}>
-                    <div className="message-text">
-                        {msg.isHtml ? (
-                            <div
-                                dangerouslySetInnerHTML={{
-                                    __html: msg.text,
-                                }}
+                    {messages.map((msg, index) => (
+              <div key={index} className={`chat-message ${msg.sender}`}>
+                <div className="message-text">
+                  {msg.isHtml ? (
+                    <div dangerouslySetInnerHTML={{ __html: msg.text }} />
+                  ) : msg.type === "multipleAnswers" ? (
+                    <>
+                      {/* عرض الوصف الشامل أولًا */}
+                      {msg.overview && (
+                        <div 
+                          className="overview-description"
+                          dangerouslySetInnerHTML={{ __html: msg.overview }}
+                        />
+                      )}
+                      
+                      {/* عرض الحقول القابلة للطي */}
+                      {msg.collapsibleItems.map((item, itemIndex) => (
+                        <div key={itemIndex} className="collapsible-item">
+                          <button
+                            onClick={() => toggleItem(index, itemIndex)}
+                            className="collapsible-button"
+                          >
+                            {item.title}
+                          </button>
+                          {item.isExpanded && (
+                            <div 
+                              className="collapsible-content"
+                              dangerouslySetInnerHTML={{ __html: item.description }}
                             />
-                        ) : msg.type === "multipleAnswers" ? (
-                            msg.collapsibleItems.map((item, itemIndex) => (
-                                <div key={itemIndex} className="collapsible-item">
-                                    <button
-                                        onClick={() => toggleItem(index, itemIndex)}
-                                        className="collapsible-button"
-                                    >
-                                        {item.title}
-                                    </button>
-                                      {item.isExpanded && (
-                                        <div
-                                          className="collapsible-content"
-                                          dangerouslySetInnerHTML={{ __html: item.description }}
-                                        />
-                                      )}
-                                </div>
-                            ))
-                        ) : (
-                            <TypeAnimation
-                                sequence={[msg.text, () => {
-                                }]}
-                                speed={70}
-                                repeat={0}
-                                wrapper="div"
-                            />
-                        )}
-                    </div>
-                    {msg.sender === "bot" && msg.isButton && (
-                        <button
-                            onClick={() => handleSimilarQuestion(msg.id)}
-                            className="similar-question-button"
-                        >
-                            <GiReturnArrow/> {msg.text}
-                        </button>
-                    )}
+                          )}
+                        </div>
+                      ))}
+                    </>
+                  ) : (
+                    <TypeAnimation
+                      sequence={[msg.text, () => {}]}
+                      speed={70}
+                      repeat={0}
+                      wrapper="div"
+                    />
+                  )}
                 </div>
+              </div>
             ))}
             <div ref={messagesEndRef}/>
         </div>

@@ -323,7 +323,7 @@ const ChatPage = () => {
       {/* Footer */}
       <div className="footer">
         <p>
-          © حقوق الطبع والنشر 2024{" "}
+          © حقوق الطبع والنشر 2025{" "}
           <a
             href="https://www.oic-oci.org/"
             target="_blank"

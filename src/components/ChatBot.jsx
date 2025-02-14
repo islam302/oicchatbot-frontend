@@ -126,6 +126,30 @@ const ChatPage = () => {
     );
   };
 
+  const renderContent = (html) => {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, "text/html");
+
+    // فصل الفقرات الأولى عن الباقي
+    const firstParagraph = doc.body.firstElementChild?.outerHTML || '';
+    const additionalContent = Array.from(doc.body.children)
+      .slice(1)
+      .map(el => el.outerHTML)
+      .join('');
+
+    return {
+      main: firstParagraph,
+      additional: additionalContent
+    };
+  };
+
+  const toggleAdditionalContent = (index) => {
+    setMessages(prevMessages =>
+      prevMessages.map((msg, i) =>
+        i === index ? {...msg, isExpanded: !msg.isExpanded} : msg
+      )
+    );
+  };
 
   const handleSimilarQuestion = async (id) => {
     const similarQuestion = messages.find((msg) => msg.id === id);
@@ -221,21 +245,48 @@ const ChatPage = () => {
       {/* Chat messages container */}
       <div className="chat-container">
         <div className="chat-messages">
-                    {messages.map((msg, index) => (
+          {messages.map((msg, index) => {
+            // فصل المحتوى الرئيسي عن الإضافي
+            const { main, additional } = renderContent(msg.text);
+
+            return (
               <div key={index} className={`chat-message ${msg.sender}`}>
                 <div className="message-text">
                   {msg.isHtml ? (
-                    <div dangerouslySetInnerHTML={{ __html: msg.text }} />
+                    <>
+                      {/* عرض المحتوى الرئيسي */}
+                      <div dangerouslySetInnerHTML={{ __html: main }} />
+
+                      {/* عرض الإجابات الإضافية إذا وجدت */}
+                      {additional && (
+                        <div className="additional-content-container">
+                          <button
+                            onClick={() => toggleAdditionalContent(index)}
+                            className="show-additional-btn"
+                          >
+                            {msg.isExpanded ? 'إخفاء التفاصيل' : 'عرض التفاصيل الإضافية'}
+                            <span className={`arrow ${msg.isExpanded ? 'up' : 'down'}`} />
+                          </button>
+
+                          {msg.isExpanded && (
+                            <div
+                              className="additional-content"
+                              dangerouslySetInnerHTML={{ __html: additional }}
+                            />
+                          )}
+                        </div>
+                      )}
+                    </>
                   ) : msg.type === "multipleAnswers" ? (
                     <>
                       {/* عرض الوصف الشامل أولًا */}
                       {msg.overview && (
-                        <div 
+                        <div
                           className="overview-description"
                           dangerouslySetInnerHTML={{ __html: msg.overview }}
                         />
                       )}
-                      
+
                       {/* عرض الحقول القابلة للطي */}
                       {msg.collapsibleItems.map((item, itemIndex) => (
                         <div key={itemIndex} className="collapsible-item">
@@ -246,7 +297,7 @@ const ChatPage = () => {
                             {item.title}
                           </button>
                           {item.isExpanded && (
-                            <div 
+                            <div
                               className="collapsible-content"
                               dangerouslySetInnerHTML={{ __html: item.description }}
                             />
@@ -264,8 +315,9 @@ const ChatPage = () => {
                   )}
                 </div>
               </div>
-            ))}
-            <div ref={messagesEndRef}/>
+            );
+          })}
+          <div ref={messagesEndRef} />
         </div>
       </div>
 

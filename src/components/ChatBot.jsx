@@ -74,7 +74,7 @@ const ChatPage = () => {
               isExpanded: false
             };
           });
-      
+
         updatedMessages.push({
           sender: "bot",
           overview: addLinkTargetAttribute(overview), // معالجة الروابط هنا أيضًا
@@ -123,31 +123,6 @@ const ChatPage = () => {
         }
         return msg;
       })
-    );
-  };
-
-  const renderContent = (html) => {
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(html, "text/html");
-
-    // فصل الفقرات الأولى عن الباقي
-    const firstParagraph = doc.body.firstElementChild?.outerHTML || '';
-    const additionalContent = Array.from(doc.body.children)
-      .slice(1)
-      .map(el => el.outerHTML)
-      .join('');
-
-    return {
-      main: firstParagraph,
-      additional: additionalContent
-    };
-  };
-
-  const toggleAdditionalContent = (index) => {
-    setMessages(prevMessages =>
-      prevMessages.map((msg, i) =>
-        i === index ? {...msg, isExpanded: !msg.isExpanded} : msg
-      )
     );
   };
 
@@ -245,38 +220,11 @@ const ChatPage = () => {
       {/* Chat messages container */}
       <div className="chat-container">
         <div className="chat-messages">
-          {messages.map((msg, index) => {
-            // فصل المحتوى الرئيسي عن الإضافي
-            const { main, additional } = renderContent(msg.text);
-
-            return (
+                    {messages.map((msg, index) => (
               <div key={index} className={`chat-message ${msg.sender}`}>
                 <div className="message-text">
                   {msg.isHtml ? (
-                    <>
-                      {/* عرض المحتوى الرئيسي */}
-                      <div dangerouslySetInnerHTML={{ __html: main || '<p>عذراً لا يمكنني توفير إجابة لهذا السؤال. أنا لازلت تحت التدريب للإجابة على كل الأسئلة في سياق مجال عملنا. إذا كان سؤالك في هذا المجال، أعدك بتوفير الإجابة في المرة القادمة.</p>' }} />
-
-                      {/* عرض الإجابات الإضافية إذا وجدت */}
-                      {additional && (
-                        <div className="additional-content-container">
-                          <button
-                            onClick={() => toggleAdditionalContent(index)}
-                            className="show-additional-btn"
-                          >
-                            {msg.isExpanded ? 'إخفاء التفاصيل' : 'عرض التفاصيل الإضافية'}
-                            <span className={`arrow ${msg.isExpanded ? 'up' : 'down'}`} />
-                          </button>
-
-                          {msg.isExpanded && (
-                            <div
-                              className="additional-content"
-                              dangerouslySetInnerHTML={{ __html: additional }}
-                            />
-                          )}
-                        </div>
-                      )}
-                    </>
+                    <div dangerouslySetInnerHTML={{ __html: msg.text }} />
                   ) : msg.type === "multipleAnswers" ? (
                     <>
                       {/* عرض الوصف الشامل أولًا */}
@@ -315,9 +263,8 @@ const ChatPage = () => {
                   )}
                 </div>
               </div>
-            );
-          })}
-          <div ref={messagesEndRef} />
+            ))}
+            <div ref={messagesEndRef}/>
         </div>
       </div>
 

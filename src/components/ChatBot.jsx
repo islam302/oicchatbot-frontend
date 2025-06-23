@@ -132,7 +132,7 @@ const ChatPage = () => {
 
     try {
       const response = await axios.post(
-        "https://oicchatbot.onrender.com/ask_questions/",
+        "https://unachatbot-po0f.onrender.com/ask_questions/",
         {
           question: similarQuestion.text,
         }

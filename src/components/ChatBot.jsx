@@ -18,6 +18,7 @@ const ChatPage = () => {
   const messagesEndRef = useRef(null);
   const [currentDate, setCurrentDate] = useState("");
   const [placeholder, setPlaceholder] = useState("اكتب سؤالك هنا..."); // نص placeholder
+  const [isLoading, setIsLoading] = useState(false); // State for loading dots
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -52,6 +53,7 @@ const ChatPage = () => {
     const newMessages = [...messages, { text: input, sender: "user" }];
     setMessages(newMessages);
     setInput("");
+    setIsLoading(true); // Show loading dots
 
     const apiUrl = useUnaApi
       ? "https://oicchatbot-bamu.onrender.com/ask_una/"
@@ -107,6 +109,8 @@ const ChatPage = () => {
           icon: "https://i.postimg.cc/wB80F6Z9/chatbot.png",
         },
       ]);
+    } finally {
+      setIsLoading(false); // Hide loading dots
     }
   };
 
@@ -220,51 +224,58 @@ const ChatPage = () => {
       {/* Chat messages container */}
       <div className="chat-container">
         <div className="chat-messages">
-                    {messages.map((msg, index) => (
-              <div key={index} className={`chat-message ${msg.sender}`}>
-                <div className="message-text">
-                  {msg.isHtml ? (
-                    <div dangerouslySetInnerHTML={{ __html: msg.text }} />
-                  ) : msg.type === "multipleAnswers" ? (
-                    <>
-                      {/* عرض الوصف الشامل أولًا */}
-                      {msg.overview && (
-                        <div
-                          className="overview-description"
-                          dangerouslySetInnerHTML={{ __html: msg.overview }}
-                        />
-                      )}
+          {messages.map((msg, index) => (
+            <div key={index} className={`chat-message ${msg.sender}`}>
+              <div className="message-text">
+                {msg.isHtml ? (
+                  <div dangerouslySetInnerHTML={{ __html: msg.text }} />
+                ) : msg.type === "multipleAnswers" ? (
+                  <>
+                    {/* عرض الوصف الشامل أولًا */}
+                    {msg.overview && (
+                      <div
+                        className="overview-description"
+                        dangerouslySetInnerHTML={{ __html: msg.overview }}
+                      />
+                    )}
 
-                      {/* عرض الحقول القابلة للطي */}
-                      {msg.collapsibleItems.map((item, itemIndex) => (
-                        <div key={itemIndex} className="collapsible-item">
-                          <button
-                            onClick={() => toggleItem(index, itemIndex)}
-                            className="collapsible-button"
-                          >
-                            {item.title}
-                          </button>
-                          {item.isExpanded && (
-                            <div
-                              className="collapsible-content"
-                              dangerouslySetInnerHTML={{ __html: item.description }}
-                            />
-                          )}
-                        </div>
-                      ))}
-                    </>
-                  ) : (
-                    <TypeAnimation
-                      sequence={[msg.text, () => {}]}
-                      speed={70}
-                      repeat={0}
-                      wrapper="div"
-                    />
-                  )}
-                </div>
+                    {/* عرض الحقول القابلة للطي */}
+                    {msg.collapsibleItems.map((item, itemIndex) => (
+                      <div key={itemIndex} className="collapsible-item">
+                        <button
+                          onClick={() => toggleItem(index, itemIndex)}
+                          className="collapsible-button"
+                        >
+                          {item.title}
+                        </button>
+                        {item.isExpanded && (
+                          <div
+                            className="collapsible-content"
+                            dangerouslySetInnerHTML={{ __html: item.description }}
+                          />
+                        )}
+                      </div>
+                    ))}
+                  </>
+                ) : (
+                  <TypeAnimation
+                    sequence={[msg.text, () => {}]}
+                    speed={70}
+                    repeat={0}
+                    wrapper="div"
+                  />
+                )}
               </div>
-            ))}
-            <div ref={messagesEndRef}/>
+            </div>
+          ))}
+          {isLoading && (
+            <div className="loading-dots">
+              <span className="dot"></span>
+              <span className="dot"></span>
+              <span className="dot"></span>
+            </div>
+          )}
+          <div ref={messagesEndRef} />
         </div>
       </div>
 
@@ -362,3 +373,4 @@ const ChatPage = () => {
 };
 
 export default ChatPage;
+
